@@ -1,0 +1,74 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<?php use Phalcon\Tag; ?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+            <li class="previous"><?php echo $this->tag->linkTo(["login/index", "Menú Principal"]); ?></li>
+            <li class="next"><?php echo $this->tag->linkTo(["pagos/new", "Crear Pago "]); ?></li>
+			
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>Listado de Pagos</h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Pago</th>
+            <th>Pago Alicuta</th>
+            <th>Fecha Alicuota</th>
+            <th>Penalidad Alicuota</th>
+            <th>Total Alicuota</th>
+            <th>Numero Departamento</th>
+
+                <th></th>
+             
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $pago): ?>
+            <tr>
+                <td><?php echo $pago->getIdpago() ?></td>
+            <td><?php echo $pago->getPagoalicuta() ?></td>
+            <td><?php echo $pago->getFechaalicuota() ?></td>
+            <td><?php echo $pago->getPenalidadalicuota() ?></td>
+            <td><?php echo $pago->getTotalalicuota() ?></td>
+            <td><?php echo $pago->getIddepartamento() ?></td>
+
+                <td><?php echo $this->tag->linkTo(["pagos/pagar/" . $pago->getIdpago(), "Pagar"]); ?></td>
+             
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, "/", $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag->linkTo("departamentos/search", "Primera") ?></li>
+                <li><?php echo $this->tag->linkTo("departamentos/search?page=" . $page->before, "Anterior") ?></li>
+                <li><?php echo $this->tag->linkTo("departamentos/search?page=" . $page->next, "Siguiente") ?></li>
+                <li><?php echo $this->tag->linkTo("departamentos/search?page=" . $page->last, "Ultima") ?></li>
+            </ul>
+        </nav>
+    </div>
+</div>

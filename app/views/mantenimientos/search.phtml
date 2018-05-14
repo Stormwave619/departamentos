@@ -1,0 +1,76 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<?php use Phalcon\Tag; ?>
+
+<div class="row">
+    <nav>
+        <ul class="pager">
+			<li class="previous"><?php echo $this->tag->linkTo(["login/index", "Menú Principal"]); ?></li>
+			<li class="previous"><?php echo $this->tag->linkTo(["mantenimientos/resultado/", "Resultado Mantenimientos"]); ?></li>
+			<li class="previous"><?php echo $this->tag->linkTo(["mantenimientos/new/", "Crear Mantenimiento"]); ?></li>
+        </ul>
+    </nav>
+</div>
+
+<div class="page-header">
+    <h1>Lista de Mantenimientos</h1>
+</div>
+
+<?php echo $this->getContent(); ?>
+
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mantenimiento</th>
+            <th>Nombre del Mantenimiento</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Costo de Mantenimiento</th>
+            <th>Votar Mantenimiento</th>
+            <th>Numero Departamento</th>
+
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($page->items as $mantenimiento): ?>
+            <tr>
+                <td><?php echo $mantenimiento->getIdmantenimiento() ?></td>
+            <td><?php echo $mantenimiento->getNombremantenimiento() ?></td>
+            <td><?php echo $mantenimiento->getFechainicio() ?></td>
+            <td><?php echo $mantenimiento->getFechafin() ?></td>
+            <td><?php echo $mantenimiento->getCostomantenimiento() ?></td>
+            <td><?php echo $this->tag->linkTo(["mantenimientos/votar/" . $mantenimiento->getIdmantenimiento(), "Votar"]); ?></td>
+            <td><?php echo $mantenimiento->getIddepartamento() ?></td>
+
+                <td><?php echo $this->tag->linkTo(["mantenimientos/edit/" . $mantenimiento->getIdmantenimiento(), "Edit"]); ?></td>
+                <td><?php echo $this->tag->linkTo(["mantenimientos/delete/" . $mantenimiento->getIdmantenimiento(), "Delete"]); ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-sm-1">
+        <p class="pagination" style="line-height: 1.42857;padding: 6px 12px;">
+            <?php echo $page->current, "/", $page->total_pages ?>
+        </p>
+    </div>
+    <div class="col-sm-11">
+        <nav>
+            <ul class="pagination">
+                <li><?php echo $this->tag->linkTo("mantenimientos/search", "First") ?></li>
+                <li><?php echo $this->tag->linkTo("mantenimientos/search?page=" . $page->before, "Previous") ?></li>
+                <li><?php echo $this->tag->linkTo("mantenimientos/search?page=" . $page->next, "Next") ?></li>
+                <li><?php echo $this->tag->linkTo("mantenimientos/search?page=" . $page->last, "Last") ?></li>
+            </ul>
+        </nav>
+    </div>
+</div>

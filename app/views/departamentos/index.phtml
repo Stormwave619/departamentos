@@ -1,0 +1,63 @@
+<?php
+/**
+ * @var \Phalcon\Mvc\View\Engine\Php $this
+ */
+?>
+
+<div class="page-header">
+    <h1>
+        Search departamentos
+    </h1>
+    <p>
+        <?php echo $this->tag->linkTo(["departamentos/new", "Create departamentos"]) ?>
+    </p>
+</div>
+
+<?php echo $this->getContent() ?>
+
+<?php
+    echo $this->tag->form(
+        [
+            "departamentos/search",
+            "autocomplete" => "off",
+            "class" => "form-horizontal"
+        ]
+    );
+?>
+
+<div class="form-group">
+    <label for="fieldIddepartamento" class="col-sm-2 control-label">IdDepartamento</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["idDepartamento", "type" => "number", "class" => "form-control", "id" => "fieldIddepartamento"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldNumerodepartamento" class="col-sm-2 control-label">NumeroDepartamento</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["numeroDepartamento", "type" => "number", "class" => "form-control", "id" => "fieldNumerodepartamento"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldNumerotelefono" class="col-sm-2 control-label">NumeroTelefono</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["numeroTelefono", "type" => "number", "class" => "form-control", "id" => "fieldNumerotelefono"]) ?>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="fieldIdusuario" class="col-sm-2 control-label">IdUsuario</label>
+    <div class="col-sm-10">
+        <?php echo $this->tag->textField(["idUsuario", "type" => "number", "class" => "form-control", "id" => "fieldIdusuario"]) ?>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <?php echo $this->tag->submitButton(["Search", "class" => "btn btn-default"]) ?>
+    </div>
+</div>
+
+<?php echo $this->tag->endForm(); ?>
