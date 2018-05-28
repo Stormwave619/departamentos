@@ -42,6 +42,13 @@ class Mantenimientos extends \Phalcon\Mvc\Model
 
     /**
      *
+     * @var string
+     * @Column(column="memberpic", type="string", nullable=true)
+     */
+    protected $memberpic;
+
+    /**
+     *
      * @var integer
      * @Column(column="votoMantenimiento", type="integer", length=11, nullable=false)
      */
@@ -120,6 +127,19 @@ class Mantenimientos extends \Phalcon\Mvc\Model
     }
 
     /**
+     * Method to set the value of field memberpic
+     *
+     * @param string $memberpic
+     * @return $this
+     */
+    public function setMemberpic($memberpic)
+    {
+        $this->memberpic = $memberpic;
+
+        return $this;
+    }
+
+    /**
      * Method to set the value of field votoMantenimiento
      *
      * @param integer $votoMantenimiento
@@ -193,6 +213,16 @@ class Mantenimientos extends \Phalcon\Mvc\Model
     public function getCostoMantenimiento()
     {
         return $this->costoMantenimiento;
+    }
+
+    /**
+     * Returns the value of field memberpic
+     *
+     * @return string
+     */
+    public function getMemberpic()
+    {
+        return $this->memberpic;
     }
 
     /**

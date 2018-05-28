@@ -4,6 +4,8 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
 
+$numero = true;
+
 class MantenimientosController extends ControllerBase
 {
     /**
@@ -35,7 +37,7 @@ class MantenimientosController extends ControllerBase
 
         $mantenimientos = Mantenimientos::find($parameters);
         if (count($mantenimientos) == 0) {
-            $this->flash->notice("The search did not find any mantenimientos");
+            $this->flash->notice("La busqueda no arrojo resultados");
 
             $this->dispatcher->forward([
                 "controller" => "mantenimientos",
@@ -74,7 +76,7 @@ class MantenimientosController extends ControllerBase
 
             $mantenimiento = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
             if (!$mantenimiento) {
-                $this->flash->error("mantenimiento was not found");
+                $this->flash->error("Mantenimiento no encontrado");
 
                 $this->dispatcher->forward([
                     'controller' => "mantenimientos",
@@ -110,6 +112,19 @@ class MantenimientosController extends ControllerBase
 
             return;
         }
+		
+		/*if ($this->request->hasFiles() == true) 
+        {
+            // Print the real file names and sizes
+            foreach ($this->request->getUploadedFiles() as $file) {
+ 
+                //Print file details
+                echo $file->getName(), " ", $file->getSize(), "\n";
+ 
+                //guardamos dentro del directorio img
+                $file->moveTo('img/' . $file->getName());
+            }
+        }*/
 
         $mantenimiento = new Mantenimientos();
         $mantenimiento->setnombreMantenimiento($this->request->getPost("nombreMantenimiento"));
@@ -117,10 +132,18 @@ class MantenimientosController extends ControllerBase
         $mantenimiento->setfechaFin($this->request->getPost("fechaFin"));
         $mantenimiento->setcostoMantenimiento($this->request->getPost("costoMantenimiento"));
         $mantenimiento->setvotoMantenimiento($this->request->getPost("votoMantenimiento"));
+		$mantenimiento->setMemberPic(base64_encode(file_get_contents($this->request->getUploadedFiles()[0]->getTempName())));
         $mantenimiento->setidDepartamento($this->request->getPost("idDepartamento"));
         
-
-        if (!$mantenimiento->save()) {
+		
+		$fecha1=$this->request->getPost("fechaInicio");
+        $fecha2=$this->request->getPost("fechaFin");
+		
+	
+		
+		if ($fecha1<$fecha2){
+			
+			if (!$mantenimiento->save()) {
             foreach ($mantenimiento->getMessages() as $message) {
                 $this->flash->error($message);
             }
@@ -133,12 +156,29 @@ class MantenimientosController extends ControllerBase
             return;
         }
 
-        $this->flash->success("mantenimiento was created successfully");
+        $this->flash->success("Mantenimiento creado Satisfactoriamente");
 
         $this->dispatcher->forward([
             'controller' => "mantenimientos",
             'action' => 'index'
         ]);
+			
+		}else{
+			
+			$this->flash->error("Fechas Incorrectas");
+			 
+			$this->dispatcher->forward([
+                'controller' => "mantenimientos",
+                'action' => 'index'
+			]);
+			
+			
+
+            return;
+			
+		}
+	
+        
     }
 
     /**
@@ -161,7 +201,7 @@ class MantenimientosController extends ControllerBase
         $mantenimiento = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
 
         if (!$mantenimiento) {
-            $this->flash->error("mantenimiento does not exist " . $idMantenimiento);
+            $this->flash->error("Mantenimiento no existe" . $idMantenimiento);
 
             $this->dispatcher->forward([
                 'controller' => "mantenimientos",
@@ -194,7 +234,7 @@ class MantenimientosController extends ControllerBase
             return;
         }
 
-        $this->flash->success("mantenimiento was updated successfully");
+        $this->flash->success("Mantenimiento actualizado satisfactoriamente");
 
         $this->dispatcher->forward([
             'controller' => "mantenimientos",
@@ -211,7 +251,7 @@ class MantenimientosController extends ControllerBase
     {
         $mantenimiento = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
         if (!$mantenimiento) {
-            $this->flash->error("mantenimiento was not found");
+            $this->flash->error("Mantenimiento no encontrado");
 
             $this->dispatcher->forward([
                 'controller' => "mantenimientos",
@@ -235,7 +275,7 @@ class MantenimientosController extends ControllerBase
             return;
         }
 
-        $this->flash->success("mantenimiento was deleted successfully");
+        $this->flash->success("Mantenimiento Borrado Satisfactoriamente");
 
         $this->dispatcher->forward([
             'controller' => "mantenimientos",
@@ -261,7 +301,7 @@ class MantenimientosController extends ControllerBase
 
         $mantenimientos = Mantenimientos::find($parameters);
         if (count($mantenimientos) == 0) {
-            $this->flash->notice("The search did not find any mantenimientos");
+            $this->flash->notice("La busqueda no arrojo resultados");
 
             $this->dispatcher->forward([
                 "controller" => "mantenimientos",
@@ -280,19 +320,53 @@ class MantenimientosController extends ControllerBase
         $this->view->page = $paginator->getPaginate();
     }
 	
+	
+	
 	public function votarAction($idMantenimiento)
 	{
-		$option = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
-		$option->votoMantenimiento++;
-		$option->save();
 		
-		return $this->dispatcher->forward(array(
-		        'action' => 'search',
-				'params' => array($option->idMantenimiento)
-				));
+		global $numero;
+		
+		if ($numero == true)
+		{
+		
+			$option = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
+			$option->votoMantenimiento++;
+			$option->save();
+			$this->flash->success("Voto Realizado Correctamente");
+		
+			
+			
+			echo $numero;
+			
+			return $this->dispatcher->forward(array(
+					'action' => 'search',
+					'params' => array($option->idMantenimiento)
+					));
+			
+		
+			 
+		}else{
+		
+			
+			$this->flash->error("Solo puede votar 1 vez");
+			 
+			$this->dispatcher->forward([
+                'controller' => "mantenimientos",
+                'action' => 'search'
+			]);
+			
+			
+
+            return;
+		}
+	
+		
+		
 		
 		
 	}
 	
+
 
 }

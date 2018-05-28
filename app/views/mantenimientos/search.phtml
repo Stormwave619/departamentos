@@ -20,6 +20,8 @@
     <h1>Lista de Mantenimientos</h1>
 </div>
 
+
+
 <?php echo $this->getContent(); ?>
 
 <div class="row">
@@ -31,6 +33,7 @@
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>Costo de Mantenimiento</th>
+			<th>Archivo Cargado</th>
             <th>Votar Mantenimiento</th>
             <th>Numero Departamento</th>
 
@@ -46,9 +49,13 @@
             <td><?php echo $mantenimiento->getFechainicio() ?></td>
             <td><?php echo $mantenimiento->getFechafin() ?></td>
             <td><?php echo $mantenimiento->getCostomantenimiento() ?></td>
-            <td><?php echo $this->tag->linkTo(["mantenimientos/votar/" . $mantenimiento->getIdmantenimiento(), "Votar"]); ?></td>
+			<td>
+				<a href="data:image/jpeg;base64 ,<?php echo $mantenimiento->getMemberpic()?>" target="_blank">Imagen</a>
+				
+				</a>
+			</td>
+			<td><?php echo $this->tag->linkTo(["mantenimientos/votar/" . $mantenimiento->getIdmantenimiento(), "Votar"]); ?></td>
             <td><?php echo $mantenimiento->getIddepartamento() ?></td>
-
                 <td><?php echo $this->tag->linkTo(["mantenimientos/edit/" . $mantenimiento->getIdmantenimiento(), "Edit"]); ?></td>
                 <td><?php echo $this->tag->linkTo(["mantenimientos/delete/" . $mantenimiento->getIdmantenimiento(), "Delete"]); ?></td>
             </tr>
