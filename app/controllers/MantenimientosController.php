@@ -361,8 +361,25 @@ class MantenimientosController extends ControllerBase
             return;
 		}
 	
+
+	}
+	
+	
+	public function jsonChartDataAction()
+	{
+		
+		$this->view->disable();
+		$dataPoints = Datapoints::find();
+		$this->response->resetHeaders();
+		$this->response->setContentType('application/json', 'UTF-8');
+		$this->response->setContent(json_encode($dataPoints,JSON_NUMERIC_CHECK));
+		return $this->response->send();
 		
 		
+	}
+	
+	public function mantenimientosChartAction()
+	{
 		
 		
 	}

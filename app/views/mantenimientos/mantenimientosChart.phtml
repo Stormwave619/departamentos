@@ -1,0 +1,18 @@
+<?php echo $this->getContent() ?>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+$.getJSON('<?php echo $this->url->getBaseUri() . 'mantenimientos/jsonChartData'?>', function( data ) {
+		var chart = new CanvasJS.Chart("chartContainer", {
+		data: [              
+		    {
+			type: "column",
+			dataPoints: data,
+		    }
+		]
+	});
+	chart.render();
+});
+
+</script>
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
