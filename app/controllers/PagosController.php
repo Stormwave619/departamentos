@@ -1,7 +1,11 @@
 <?php
- 
+
+use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Mvc\Model\Manager;
 use Phalcon\Paginator\Adapter\Model as Paginator;
+
+
 
 
 class PagosController extends ControllerBase
@@ -35,7 +39,7 @@ class PagosController extends ControllerBase
 
         $pagos = Pagos::find($parameters);
         if (count($pagos) == 0) {
-            $this->flash->notice("The search did not find any pagos");
+            $this->flash->notice("La busqueda no arrojo resultados");
 
             $this->dispatcher->forward([
                 "controller" => "pagos",
@@ -73,7 +77,7 @@ class PagosController extends ControllerBase
 
             $pago = Pagos::findFirstByidPago($idPago);
             if (!$pago) {
-                $this->flash->error("pago was not found");
+                $this->flash->error("Pago no Encontrado");
 
                 $this->dispatcher->forward([
                     'controller' => "pagos",
@@ -84,7 +88,6 @@ class PagosController extends ControllerBase
             }
 
             $this->view->idPago = $pago->getIdpago();
-
             $this->tag->setDefault("idPago", $pago->getIdpago());
             $this->tag->setDefault("pagoAlicuta", $pago->getPagoalicuta());
             $this->tag->setDefault("fechaAlicuota", $pago->getFechaalicuota());
@@ -100,6 +103,31 @@ class PagosController extends ControllerBase
      */
     public function createAction()
     {
+        /*
+        $con = new Phalcon\Db\Adapter\Pdo\Mysql(array(
+
+            'host'=>'localhost',
+            'username'=>'root',
+            'password'=>'',
+            'dbname'=>'departamentos'
+        ));
+
+        $con->connect();
+        $sql='SELECT pagos.idDepartamento, COUNT(*)
+                FROM pagos 
+                GROUP BY pagos.idDepartamento';
+        $result=$con->query($sql);
+        $result->setFetchMode(Phalcon\Db::FETCH_ASSOC);
+        $result=$result->fetchAll($result);
+
+        foreach ($result as $one) 
+        {
+            echo print_r($one). '<br>';
+        }
+        */
+
+
+
         if (!$this->request->isPost()) {
             $this->dispatcher->forward([
                 'controller' => "pagos",
@@ -109,33 +137,81 @@ class PagosController extends ControllerBase
             return;
         }
 
-        $pago = new Pagos();
-        $pago->setpagoAlicuta($this->request->getPost("pagoAlicuta"));
-        $pago->setfechaAlicuota($this->request->getPost("fechaAlicuota"));
-        $pago->setpenalidadAlicuota($this->request->getPost("penalidadAlicuota"));
-        $pago->settotalAlicuota($this->request->getPost("totalAlicuota"));
-        $pago->setidDepartamento($this->request->getPost("idDepartamento"));
-        
+    
+        $fecha1=$this->request->getPost("fechaAlicuota");
+        $fecha2 = date('Y-m-d');
+        $pago=$this->request->getPost("pagoAlicuta");
+       
+        $calculo = 0;
 
-        if (!$pago->save()) {
-            foreach ($pago->getMessages() as $message) {
-                $this->flash->error($message);
+
+            if ($fecha1>$fecha2){
+
+                $calculo=$pago+($pago*0.05);
+
+                $pago = new Pagos();
+                $pago->setpagoAlicuta($this->request->getPost("pagoAlicuta"));
+                $pago->setfechaAlicuota($this->request->getPost("fechaAlicuota"));
+                $pago->setpenalidadAlicuota($this->request->getPost("penalidadAlicuota"));
+                $pago->settotalAlicuota($calculo);
+                $pago->setidDepartamento($this->request->getPost("idDepartamento"));
+                $detector = $this->request->getPost("penalidadAlicuota");
+
+
+
+
+                 if (!$pago->save()) {
+                    foreach ($pago->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+
+                    $this->dispatcher->forward([
+                        'controller' => "pagos",
+                        'action' => 'new'
+                    ]);
+
+                    return;
+                }
+
+                $this->flash->success("Pago Ingresado con Penalidad");
+
+                $this->dispatcher->forward([
+                    'controller' => "pagos",
+                    'action' => 'index'
+                ]);
+
+
+            }else{
+
+                $pago = new Pagos();
+                $pago->setpagoAlicuta($this->request->getPost("pagoAlicuta"));
+                $pago->setfechaAlicuota($this->request->getPost("fechaAlicuota"));
+                $pago->setpenalidadAlicuota($this->request->getPost("penalidadAlicuota"));
+                $pago->settotalAlicuota($this->request->getPost("totalAlicuota"));
+                $pago->setidDepartamento($this->request->getPost("idDepartamento"));
+            
+                    if (!$pago->save()) {
+                    foreach ($pago->getMessages() as $message) {
+                        $this->flash->error($message);
+                    }
+
+                    $this->dispatcher->forward([
+                        'controller' => "pagos",
+                        'action' => 'new'
+                    ]);
+
+                    return;
+                }
+
+                $this->flash->success("Pago ingresado");
+
+                $this->dispatcher->forward([
+                    'controller' => "pagos",
+                    'action' => 'index'
+                ]);
+            
             }
 
-            $this->dispatcher->forward([
-                'controller' => "pagos",
-                'action' => 'new'
-            ]);
-
-            return;
-        }
-
-        $this->flash->success("pago was created successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "pagos",
-            'action' => 'index'
-        ]);
     }
 
     /**
@@ -190,7 +266,7 @@ class PagosController extends ControllerBase
             return;
         }
 
-        $this->flash->success("pago was updated successfully");
+        $this->flash->success("Pago Actualizado Satisfactoriamente");
 
         $this->dispatcher->forward([
             'controller' => "pagos",
@@ -207,7 +283,7 @@ class PagosController extends ControllerBase
     {
         $pago = Pagos::findFirstByidPago($idPago);
         if (!$pago) {
-            $this->flash->error("pago was not found");
+            $this->flash->error("Pago no encontrado");
 
             $this->dispatcher->forward([
                 'controller' => "pagos",
@@ -231,7 +307,7 @@ class PagosController extends ControllerBase
             return;
         }
 
-        $this->flash->success("pago was deleted successfully");
+        $this->flash->success("Pago Borrado Satisfactoriamente");
 
         $this->dispatcher->forward([
             'controller' => "pagos",

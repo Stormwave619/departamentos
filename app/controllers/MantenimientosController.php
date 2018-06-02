@@ -112,19 +112,7 @@ class MantenimientosController extends ControllerBase
 
             return;
         }
-		
-		/*if ($this->request->hasFiles() == true) 
-        {
-            // Print the real file names and sizes
-            foreach ($this->request->getUploadedFiles() as $file) {
- 
-                //Print file details
-                echo $file->getName(), " ", $file->getSize(), "\n";
- 
-                //guardamos dentro del directorio img
-                $file->moveTo('img/' . $file->getName());
-            }
-        }*/
+
 
         $mantenimiento = new Mantenimientos();
         $mantenimiento->setnombreMantenimiento($this->request->getPost("nombreMantenimiento"));
@@ -165,7 +153,7 @@ class MantenimientosController extends ControllerBase
 			
 		}else{
 			
-			$this->flash->error("Fechas Incorrectas");
+			$this->flash->error("La Fecha de Inicio es menor a la Fecha Final");
 			 
 			$this->dispatcher->forward([
                 'controller' => "mantenimientos",
@@ -318,6 +306,9 @@ class MantenimientosController extends ControllerBase
         ]);
 
         $this->view->page = $paginator->getPaginate();
+
+        
+
     }
 	
 	
@@ -325,44 +316,36 @@ class MantenimientosController extends ControllerBase
 	public function votarAction($idMantenimiento)
 	{
 		
-		global $numero;
-		
-		if ($numero == true)
-		{
-		
+	
+	
 			$option = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
 			$option->votoMantenimiento++;
 			$option->save();
+
 			$this->flash->success("Voto Realizado Correctamente");
 		
-			
-			
-			echo $numero;
-			
 			return $this->dispatcher->forward(array(
 					'action' => 'search',
 					'params' => array($option->idMantenimiento)
 					));
-			
-		
-			 
-		}else{
-		
-			
-			$this->flash->error("Solo puede votar 1 vez");
-			 
-			$this->dispatcher->forward([
-                'controller' => "mantenimientos",
-                'action' => 'search'
-			]);
-			
-			
-
-            return;
-		}
-	
 
 	}
+
+    public function aprobarAction($idMantenimiento)
+    {
+
+       $option = Mantenimientos::findFirstByidMantenimiento($idMantenimiento);
+       $option->votoMantenimiento;
+
+       echo $option;
+
+
+
+
+    }
+
+
+
 	
 	
 	public function jsonChartDataAction()
@@ -377,12 +360,17 @@ class MantenimientosController extends ControllerBase
 		
 		
 	}
+
+    
 	
 	public function mantenimientosChartAction()
 	{
 		
 		
 	}
+
+
+    
 	
 
 

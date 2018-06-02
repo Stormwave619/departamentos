@@ -6,10 +6,11 @@
 
 <div class="page-header">
     <h1>
-        Search pagos
+        Buscar Pagos
     </h1>
     <p>
-        <?php echo $this->tag->linkTo(["pagos/new", "Create pagos"]) ?>
+        <?php echo $this->tag->linkTo(["pagos/new", "Crear Pago"]) ?>
+        <li class="previous"><?php echo $this->tag->linkTo(["login/index", "Menú Principal"]); ?></li>
     </p>
 </div>
 
@@ -26,42 +27,42 @@
 ?>
 
 <div class="form-group">
-    <label for="fieldIdpago" class="col-sm-2 control-label">IdPago</label>
+    <label for="fieldIdpago" class="col-sm-2 control-label">Identificador Pago</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["idPago", "type" => "number", "class" => "form-control", "id" => "fieldIdpago"]) ?>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldPagoalicuta" class="col-sm-2 control-label">PagoAlicuta</label>
+    <label for="fieldPagoalicuta" class="col-sm-2 control-label">Pago Alicuota</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["pagoAlicuta", "size" => 30, "class" => "form-control", "id" => "fieldPagoalicuta"]) ?>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldFechaalicuota" class="col-sm-2 control-label">FechaAlicuota</label>
+    <label for="fieldFechaalicuota" class="col-sm-2 control-label">Fecha de Alicuota</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["fechaAlicuota", "type" => "date", "class" => "form-control", "id" => "fieldFechaalicuota"]) ?>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldPenalidadalicuota" class="col-sm-2 control-label">PenalidadAlicuota</label>
+    <label for="fieldPenalidadalicuota" class="col-sm-2 control-label">Penalidad de Alicuota</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["penalidadAlicuota", "size" => 30, "class" => "form-control", "id" => "fieldPenalidadalicuota"]) ?>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldTotalalicuota" class="col-sm-2 control-label">TotalAlicuota</label>
+    <label for="fieldTotalalicuota" class="col-sm-2 control-label">Total Alicuota</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["totalAlicuota", "size" => 30, "class" => "form-control", "id" => "fieldTotalalicuota"]) ?>
     </div>
 </div>
 
 <div class="form-group">
-    <label for="fieldIddepartamento" class="col-sm-2 control-label">IdDepartamento</label>
+    <label for="fieldIddepartamento" class="col-sm-2 control-label">Numero Departamento</label>
     <div class="col-sm-10">
         <?php echo $this->tag->textField(["idDepartamento", "type" => "number", "class" => "form-control", "id" => "fieldIddepartamento"]) ?>
     </div>
@@ -70,7 +71,7 @@
 
 <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-        <?php echo $this->tag->submitButton(["Search", "class" => "btn btn-default"]) ?>
+        <?php echo $this->tag->submitButton(["Buscar", "class" => "btn btn-default"]) ?>
     </div>
 </div>
 
