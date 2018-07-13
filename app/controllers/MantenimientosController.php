@@ -228,6 +228,9 @@ class MantenimientosController extends ControllerBase
             'controller' => "mantenimientos",
             'action' => 'index'
         ]);
+
+
+
     }
 
     /**
@@ -368,10 +371,6 @@ class MantenimientosController extends ControllerBase
 		
 		
 	}
-
-
-    
-	
 
 
 }

@@ -12,3 +12,5 @@ $loader->registerDirs(
 		$config->application->pluginsDir
     ]
 )->register();
+
+require_once __DIR__ . '/../../vendor/autoload.php';
